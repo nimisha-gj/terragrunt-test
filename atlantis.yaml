@@ -2,7 +2,7 @@
   projects:
   - name: poc
     dir: .
-    workspace: poc
+    workspace: terragrunt
     workflow: terragrunt
     autoplan:
       enabled: true   
