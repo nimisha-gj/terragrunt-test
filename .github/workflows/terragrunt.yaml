@@ -3,6 +3,7 @@ name: Terragrunt Plan and Apply
 on:
   workflow_dispatch:
   pull_request:
+    branches: [main]
 
 jobs:
   terragrunt:
