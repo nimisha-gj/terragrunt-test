@@ -1,0 +1,64 @@
+name: Terragrunt Plan and Apply
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - '**'
+
+
+jobs:
+  terragrunt:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    env:
+      TERRAGRUNT_VERSION: 0.35.6
+      TERRAFORM_VERSION: 1.5.4
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Install Terragrunt
+        run: |
+          wget https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+
+      - name: Initialize Terragrunt
+        run: terragrunt init
+
+      - name: Terragrunt Validate
+        run: terragrunt validate
+
+      - name: Terragrunt Plan
+        if: github.event_name == 'pull_request'
+        run: terragrunt plan
+
+      - name: Terragrunt Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: terragrunt apply -auto-approve
+
+      - name: Post Comment on Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          PLAN_RESULT=$(terragrunt plan -no-color)
+          echo "$PLAN_RESULT"
+          PR_NUMBER=$(echo "$GITHUB_REF" | awk -F/ '{print $3}')
+          GITHUB_COMMENT_PAYLOAD=$(jq -n --arg body "$PLAN_RESULT" '{body: $body}')
+          curl -s -S -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "$GITHUB_COMMENT_PAYLOAD" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
