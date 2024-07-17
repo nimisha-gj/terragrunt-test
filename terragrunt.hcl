@@ -15,10 +15,10 @@ locals {
 remote_state {
   backend = "s3"
   config = {
-    bucket = "testing-terragrunt-infraspec"
+    bucket = "terragrunt-testing-pairing"
     region = "ap-south-1"
     key    = "terraform_terragrunt.tfstate"
-    dynamodb_table = "testing-terragrunt-infraspec"
+    dynamodb_table = "terragrunt-testing-pairing"
     encrypt = true
   }
   generate = {
