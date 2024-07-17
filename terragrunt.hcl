@@ -18,6 +18,8 @@ remote_state {
     bucket = "testing-terragrunt-infraspec"
     region = "ap-south-1"
     key    = "terraform_terragrunt.tfstate"
+    dynamodb_table = "testing-terragrunt-infraspec"
+    encrypt = true
   }
   generate = {
     path      = "backend.tf"
