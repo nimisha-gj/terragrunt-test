@@ -15,9 +15,9 @@ locals {
 remote_state {
   backend = "s3"
   config = {
-    bucket = "example-buckets-${local.env}"
-    region = "us-east-2"
-    key    = "${path_relative_to_include()}/terraform.tfstate"
+    bucket = "testing-terragrunt-infraspec"
+    region = "ap-south-1"
+    key    = "terraform_terragrunt.tfstate"
   }
   generate = {
     path      = "backend.tf"
