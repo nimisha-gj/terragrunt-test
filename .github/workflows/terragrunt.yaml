@@ -31,7 +31,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: "arn:aws:iam::471112575944:oidc-provider/token.actions.githubusercontent.com"
+          role-to-assume: "arn:aws:iam::471112575944:role/github-actions"
           aws-region: ap-south-1          
 
       - name: Install Terragrunt
