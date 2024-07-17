@@ -5,4 +5,4 @@
     workspace: default
     workflow: terraform
     autoplan:
-      enabled: true   
+      enabled: true
