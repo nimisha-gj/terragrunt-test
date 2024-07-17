@@ -20,6 +20,11 @@ jobs:
       TERRAGRUNT_VERSION: 0.35.6
       TERRAFORM_VERSION: 1.5.4
 
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
