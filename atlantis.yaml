@@ -3,6 +3,6 @@
   - name: poc
     dir: .
     workspace: default
-    workflow: terraform
+    workflow: terragrunt
     autoplan:
       enabled: true
